@@ -1,51 +1,63 @@
-# nsupdate-cookbook
+# Description
 
-TODO: Enter the cookbook description here.
+This simple cookbook provides `nsupdate` LWRP.
+Use it as follow:
 
-## Supported Platforms
-
-TODO: List your supported platforms.
-
-## Attributes
-
-<table>
-  <tr>
-    <th>Key</th>
-    <th>Type</th>
-    <th>Description</th>
-    <th>Default</th>
-  </tr>
-  <tr>
-    <td><tt>['nsupdate']['bacon']</tt></td>
-    <td>Boolean</td>
-    <td>whether to include bacon</td>
-    <td><tt>true</tt></td>
-  </tr>
-</table>
-
-## Usage
-
-### nsupdate::default
-
-Include `nsupdate` in your node's `run_list`:
-
-```json
-{
-  "run_list": [
-    "recipe[nsupdate::default]"
-  ]
-}
+```ruby
+nsupdate 'www.example.com' do
+  value 'other.host.com'
+  type :cname
+  ttl 86400
+  action :update
+end
 ```
 
-## Contributing
+Available actions:
+* create - creates new record if records does not exist
+* delete - deletes all records for given name
+* update - updates dns records by removing any previous existing and adding new one. Only if new value does not exist yet
 
-1. Fork the repository on Github
-2. Create a named feature branch (i.e. `add-new-recipe`)
-3. Write your change
-4. Write tests for your change (if applicable)
-5. Run the tests, ensuring they all pass
-6. Submit a Pull Request
 
-## License and Authors
+# Requirements
 
-Author:: Yauhen Artsiukhou (<yauhen_artsiukhou@epam.com>)
+## Platform:
+
+* Debian
+
+## Cookbooks:
+
+*No dependencies defined*
+
+# Attributes
+
+*No attributes defined*
+
+# Recipes
+
+* nsupdate::default
+
+# Resources
+
+* [nsupdate](#nsupdate)
+
+## nsupdate
+
+### Actions
+
+- create:  Default action.
+- delete:
+- update:
+
+### Attribute Parameters
+
+- value:
+- dns_type:
+- ttl:
+
+# License and Maintainer
+
+Copyright: Yauhen Artsiukhou
+
+Standard MIT License
+
+Maintainer: Yauhen Artsiukhou <jsirex@gmail.com>

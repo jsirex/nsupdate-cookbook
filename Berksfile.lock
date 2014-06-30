@@ -1,0 +1,7 @@
+DEPENDENCIES
+  nsupdate
+    path: .
+    metadata: true
+
+GRAPH
+  nsupdate (0.1.0)
