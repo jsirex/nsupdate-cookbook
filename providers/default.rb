@@ -5,7 +5,7 @@ def whyrun_supported?
 end
 
 action :create do
-  ips = Resolv.getaddresses(new_resource.name)
+  ips = Resolv::DNS.new.getaddresses(new_resource.name).map(&:to_s)
   Chef::Log.debug("Resolved hosts: #{ips}")
 
   ruby_block "Creating DNS Record - #{new_resource.name}" do
@@ -26,7 +26,7 @@ action :create do
 end
 
 action :delete do
-  ips = Resolv.getaddresses(new_resource.name)
+  ips = Resolv::DNS.new.getaddresses(new_resource.name).map(&:to_s)
   Chef::Log.debug("Resolved hosts: #{ips}")
 
   ruby_block "Deleting DNS Record - #{new_resource.name}" do
@@ -54,7 +54,7 @@ action :update do
     return
   end
 
-  ips = Resolv.getaddresses(new_resource.name)
+  ips = Resolv::DNS.new.getaddresses(new_resource.name).map(&:to_s)
   Chef::Log.debug("Resolved hosts: #{ips}")
 
   ruby_block "Updating DNS Record - #{new_resource.name}" do
