@@ -5,10 +5,7 @@
 .*.sw[a-z]
 *.un~
 pkg/
-
-# Berkshelf
 .vagrant
-/cookbooks
 
 # Bundler
 bin/*
@@ -16,4 +13,10 @@ bin/*
 
 .kitchen/
 .kitchen.local.yml
+.kitchen.list.yml
+
+.berkshelf/
 reports/
+.yardoc/
+Berksfile.lock
+Gemfile.lock

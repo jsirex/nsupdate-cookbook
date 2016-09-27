@@ -1,22 +1,43 @@
+# frozen_string_literal: true
 source 'https://rubygems.org'
 
-# get this from git for the chefignore issues
-gem 'berkshelf', '~> 3.0'
-gem 'chef-zero'
+gem 'chef', '~> 12.12'
 
-group 'develop' do
-  gem 'test-kitchen'
-  gem 'kitchen-vagrant'
-  gem 'kitchen-docker'
-  gem 'rake'
-  gem 'foodcritic', '>= 3.0.3'
-  gem 'rubocop', '~> 0.24'
-  gem 'knife-cookbook-doc'
-  gem 'knife-spork'
-  gem 'chefspec', '~> 4.0'
-  gem 'git'
+group :lint do
+  gem 'foodcritic'
+  gem 'rubocop'
 end
 
-group 'ci' do
-  gem 'ci_reporter'
+group :unit do
+  gem 'berkshelf'
+  gem 'chefspec'
+  gem 'ci_reporter_rspec'
+end
+
+group :development do
+  gem 'rake'
+  gem 'stove'
+  gem 'pry'
+end
+
+group :knife do
+  gem 'knife-cookbook-doc'
+  gem 'knife-supermarket'
+  gem 'knife-solo_data_bag'
+end
+
+# Kitchen
+group :kitchen do
+  gem 'test-kitchen'
+  gem 'kitchen-docker'
+  gem 'kitchen-vagrant'
+  gem 'kitchen-sync'
+end
+
+group :guard do
+  gem 'guard'
+  gem 'guard-bundler', require: false
+  gem 'guard-rubocop', require: false
+  gem 'guard-foodcritic', github: 'jsirex/guard-foodcritic', require: false
+  gem 'guard-rspec', require: false
 end
