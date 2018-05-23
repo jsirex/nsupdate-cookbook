@@ -22,7 +22,9 @@ Available actions:
 
 ## Platform:
 
-* Debian
+* debian
+* redhat
+* centos
 
 ## Cookbooks:
 
@@ -34,7 +36,7 @@ Available actions:
 
 # Recipes
 
-* nsupdate::default
+* nsupdate::default - Manages DNS records using nsupdate
 
 # Resources
 
@@ -52,7 +54,7 @@ Available actions:
 
 - value:
 - dns_type:
-- ttl:
+- ttl:  Defaults to <code>86400</code>.
 
 # License and Maintainer
 

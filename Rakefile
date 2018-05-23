@@ -1,89 +1,55 @@
 #!/usr/bin/env rake
-require 'rake'
+# frozen_string_literal: true
+
+require 'foodcritic'
+require 'rubocop/rake_task'
 require 'rspec/core/rake_task'
 require 'ci/reporter/rake/rspec'
+require 'kitchen/rake_tasks'
+require 'knife_cookbook_doc/rake_task'
+require 'stove/rake_task'
 
-cookbook_dir = File.expand_path File.dirname(__FILE__)
-ENV['BERKSHELF_PATH'] = cookbook_dir + '/.berkshelf'
-ENV['CI_REPORTS'] =  cookbook_dir + '/reports'
+ENV['BERKSHELF_PATH'] = __dir__ + '/.berkshelf'
+ENV['CI_REPORTS'] = __dir__ + '/reports'
 
-SKELETON_GIT_REPO = 'https://github.com/jsirex/cookbook-skeleton.git'
-
-task default: 'test:quick'
-
-namespace :test do
-
-  RSpec::Core::RakeTask.new(:spec => ["ci:setup:rspec"]) do |t|
-    t.pattern = Dir.glob('test/spec/**/*_spec.rb')
-    t.rspec_opts = '--color -f d'
-  end
-
-  begin
-    require 'kitchen/rake_tasks'
-    Kitchen::RakeTasks.new
-  rescue LoadError
-    puts '>>>>> Kitchen gem not loaded, omitting tasks' unless ENV['CI']
-  end
-
-  begin
-    require 'foodcritic'
-
-    task default: [:foodcritic]
-    FoodCritic::Rake::LintTask.new do |t|
-      t.options = { fail_tags: %w/correctness services libraries deprecated/ }
-    end
-  rescue LoadError
-    warn 'Foodcritic Is missing ZOMG'
-  end
-
-  begin
-    require 'rubocop/rake_task'
-    RuboCop::RakeTask.new do |task|
-      task.fail_on_error = true
-    end
-  rescue LoadError
-    warn 'Rubocop gem not installed, now the code will look like crap!'
-  end
-
-  desc 'Run all of the quick tests.'
-  task :quick do
-    Rake::Task['test:rubocop'].invoke
-    Rake::Task['test:foodcritic'].invoke
-    Rake::Task['test:spec'].invoke
-  end
-
-  desc 'Run _all_ the tests. Go get a coffee.'
-  task :complete do
-    Rake::Task['test:quick'].invoke
-    Rake::Task['test:kitchen:all'].invoke
-  end
-
-  desc 'Run CI tests'
-  task :ci do
-    Rake::Task['test:complete'].invoke
-  end
+FoodCritic::Rake::LintTask.new do |t|
+  t.options = {
+    progress: true,
+    fail_tags: %w[any]
+  }
 end
 
-desc 'Ensure skeleton files are up to date'
-task :skeleton do
-  begin
-    require 'git'
-    g = Git.open('.')
+RuboCop::RakeTask.new { |t| t.fail_on_error = true }
 
-    remotes = g.remotes.map { |r| r.name }
-    rname = 'skeleton'
-    unless remotes.include?(rname)
-      puts 'Adding skeleton remote to your repository'
-      g.add_remote(rname, SKELETON_GIT_REPO)
-    end
+RSpec::Core::RakeTask.new(:spec => ['ci:setup:rspec'])
 
-    # fetch & merge remote
-    puts 'fetching latest bones'
-    g.remote(rname).fetch
-    puts 'merging remote branch'
-    sh "git merge -X theirs -m 'skeleton cookbook sync' --squash #{rname}/master"
-  rescue => e
-    warn 'The skeletons in your closet are unhappy'
-    puts e.message
-  end
+Kitchen::RakeTasks.new
+
+KnifeCookbookDoc::RakeTask.new(:doc) do |task|
+  task.options[:cookbook_dir] = './'
+  task.options[:constraints] = true
+  task.options[:output_file] = 'README.md'
+end
+
+Stove::RakeTask.new
+
+task default: 'quick'
+
+desc 'Run all of the quick tests.'
+task :quick do
+  Rake::Task['doc'].invoke
+  Rake::Task['rubocop'].invoke
+  Rake::Task['foodcritic'].invoke
+  Rake::Task['spec'].invoke
+end
+
+desc 'Run _all_ the tests. Go get a coffee.'
+task :complete do
+  Rake::Task['quick'].invoke
+  Rake::Task['kitchen:all'].invoke
+end
+
+desc 'Run CI tests'
+task :ci do
+  Rake::Task['complete'].invoke
 end

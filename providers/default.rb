@@ -1,4 +1,4 @@
-use_inline_resources if defined?(use_inline_resources)
+# frozen_string_literal: true
 
 def whyrun_supported?
   true
@@ -20,7 +20,7 @@ action :create do
       end
     end
 
-    action :create
+    action :run
     only_if { ips.empty? }
   end
 end
@@ -41,7 +41,7 @@ action :delete do
       end
     end
 
-    action :create
+    action :run
     not_if { ips.empty? }
   end
 end
@@ -70,7 +70,7 @@ action :update do
       end
     end
 
-    action :create
+    action :run
     not_if { ips.include?(new_ip) }
   end
 end

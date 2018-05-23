@@ -1,0 +1,30 @@
+template-info:
+
+  # Don't remove the name and version entries, which are ALWAYS required
+  name: "chef-cookbook"
+  version: 2.0.0
+
+  # The following entries are information about the template itself and can safely
+  # be removed on your own project.
+  summary: |
+    Template for creating a chef cookbook
+  description: |
+    This is a [Noe](https://github.com/blambeau/noe) template for creating a chef cookbook.
+  authors:
+    - {name: Yauhen Artsiukhou, email: jsirex@gmail.com}
+  links:
+    source: https://github.com/jsirex/chef-cookbook.noe/tree/master
+
+# The following entries are template-related variables. Update to match your
+# own configuration.
+variables:
+  # A lower case cookbook name
+  name: nsupdate
+  maintainer: Yauhen Artsiukhou
+  maintainer_email: jsirex@gmail.com
+  license: MIT
+  description: Provides library functions for managing mongodb
+  long_description: Provides library functions for managing mongodb
+  issues_url: https://github.com/jsirex/nsupdate-cookbook/issues/
+  source_url: https://github.com/jsirex/nsupdate-cookbook
+  version: 0.1.2
