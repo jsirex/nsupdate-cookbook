@@ -4,6 +4,7 @@ maintainer_email 'jsirex@gmail.com'
 license          'MIT'
 description      'Manages DNS records using nsupdate'
 long_description 'Manages DNS records using nsupdate'
-version          '0.1.1'
+version          '0.1.2'
 
 supports 'debian'
+supports 'rhel'
